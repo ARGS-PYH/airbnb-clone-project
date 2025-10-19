@@ -1,116 +1,106 @@
-# 🏡 Airbnb Clone Project (Backend)
+# 🏡 Airbnb Clone Project
 
-## 🚀 Overview
-The **Airbnb Clone Project** is a backend web application built to replicate the main functionalities of Airbnb — including user authentication, property listings, bookings, payments, and reviews.  
-This project focuses on backend engineering, database design, and API development using modern tools and practices to create a scalable, secure, and production-ready platform.
+## 📖 Project Overview
+The **Airbnb Clone Project** is a backend-focused web application that replicates key functionalities of Airbnb, including property listings, bookings, payments, and user management. The goal of this project is to build a scalable and secure API-based system using modern web technologies.  
 
----
-
-## 🎯 Project Goals
-- **User Management:** Secure user registration, authentication, and profile management.  
-- **Property Management:** Create, update, and manage property listings.  
-- **Booking System:** Allow users to make, update, and manage bookings.  
-- **Payment Processing:** Handle payment transactions securely.  
-- **Review System:** Enable users to leave reviews and ratings.  
-- **Data Optimization:** Improve data retrieval using indexing and caching.  
+This project is part of an ALX software engineering module focused on backend design, database architecture, and DevOps practices.
 
 ---
 
 ## 🧰 Technology Stack
 
-This section outlines the core technologies used in the **Airbnb Clone Project** and their specific roles in building a scalable backend system.
-
 | Technology | Description |
 |-------------|--------------|
-| **Django** | A high-level Python web framework that simplifies backend development by providing built-in tools for routing, ORM, authentication, and security. It serves as the core of the backend system. |
+| **Django** | A high-level Python web framework that simplifies backend development by providing built-in tools for routing, ORM, authentication, and security. It serves as the backbone of the application. |
 | **Django REST Framework (DRF)** | A powerful and flexible toolkit for building RESTful APIs in Django. It simplifies serialization, authentication, and API endpoint creation. |
-| **PostgreSQL** | A robust open-source relational database used for storing structured data such as users, properties, bookings, and payments. |
-| **GraphQL** | A query language and runtime for APIs that allows clients to request exactly the data they need, improving efficiency and reducing over-fetching. |
-| **Celery** | A distributed task queue used for handling asynchronous operations like sending email notifications or processing background tasks (e.g., payment confirmations). |
-| **Redis** | An in-memory data store used for caching and message brokering, improving performance by reducing load on the main database. |
-| **Docker** | A containerization tool that ensures consistent environments across development and deployment stages by packaging applications with all dependencies. |
-| **CI/CD (GitHub Actions)** | Continuous Integration and Continuous Deployment pipelines that automate testing, building, and deployment processes for reliable delivery. |
+| **PostgreSQL** | A robust open-source relational database used to store structured data such as users, properties, bookings, and payments. |
+| **GraphQL** | A query language and runtime for APIs that allows clients to request exactly the data they need, improving performance and efficiency. |
+| **Celery** | A distributed task queue used for handling asynchronous operations like sending email notifications or processing background tasks. |
+| **Redis** | An in-memory data store used for caching and message brokering to enhance speed and performance. |
+| **Docker** | A containerization platform that ensures consistent environments across development, testing, and deployment. |
+| **GitHub Actions (CI/CD)** | Automates testing, building, and deployment processes to ensure continuous integration and delivery. |
 
 ---
 
-### 🧩 Additional Tools (Optional Enhancements)
+## 🗃️ Database Design
+
+### Key Entities and Relationships
+
+| Entity | Key Fields | Description |
+|---------|-------------|-------------|
+| **User** | `id`, `name`, `email`, `password`, `role (host/guest)` | Represents the users of the platform. A user can list properties (as a host) or make bookings (as a guest). |
+| **Property** | `id`, `title`, `description`, `price_per_night`, `location`, `host_id` | Represents a rental property listed by a host. Each property is owned by one user (host). |
+| **Booking** | `id`, `property_id`, `guest_id`, `check_in`, `check_out`, `total_price`, `status` | Represents a reservation made by a guest for a specific property. Each booking belongs to one user (guest) and one property. |
+| **Payment** | `id`, `booking_id`, `amount`, `payment_method`, `payment_status`, `timestamp` | Records payment transactions related to bookings. Each payment is linked to a booking. |
+| **Review** | `id`, `user_id`, `property_id`, `rating`, `comment`, `created_at` | Allows users to review properties after a booking. A property can have multiple reviews. |
+
+### Relationships
+- A **User** can have multiple **Properties**.
+- A **Property** can have multiple **Bookings** and **Reviews**.
+- A **Booking** belongs to one **Property** and one **User** (guest).
+- A **Payment** is linked to a **Booking**.
+- A **Review** is linked to both a **User** and a **Property**.
+
+---
+
+## ⚙️ Feature Breakdown
+
+| Feature | Description |
+|----------|--------------|
+| **User Management** | Handles user registration, authentication, and profile management. Supports roles for hosts and guests. |
+| **Property Management** | Enables hosts to create, update, and manage property listings with details such as title, price, and location. |
+| **Booking System** | Allows guests to view available properties, check availability, and make bookings. Ensures booking validation and prevents double bookings. |
+| **Payment Processing** | Manages secure payment transactions for bookings. Integrates payment gateways and records payment history. |
+| **Review and Rating System** | Lets guests leave reviews and ratings for properties they’ve stayed in. Helps maintain transparency and trust on the platform. |
+| **Search and Filter** | Allows users to search and filter properties by price, location, or amenities for better user experience. |
+| **Admin Dashboard (Optional)** | Provides administrative control for managing users, properties, and transactions. |
+
+---
+
+## 🔒 API Security
+
+### Key Security Measures
+| Security Feature | Description | Importance |
+|------------------|-------------|-------------|
+| **Authentication** | Uses JWT (JSON Web Token) or session-based authentication to verify user identity. | Prevents unauthorized access to APIs. |
+| **Authorization** | Ensures users only access resources and actions permitted to their role (host or guest). | Protects sensitive actions and data. |
+| **Data Validation & Sanitization** | Validates user inputs and sanitizes data before saving to the database. | Prevents injection attacks and ensures data integrity. |
+| **Rate Limiting** | Limits the number of API requests per user or IP within a certain timeframe. | Protects against abuse and denial-of-service (DoS) attacks. |
+| **Encryption** | Uses HTTPS and encrypts sensitive data (e.g., passwords, payment info). | Protects user data during transmission. |
+
+**Why Security Matters:**  
+Securing backend APIs is essential for protecting user data, preventing fraudulent transactions, and ensuring trust within the platform. For a system that handles personal and financial information, robust API security is non-negotiable.
+
+---
+
+## 🚀 CI/CD Pipeline
+
+### What is CI/CD?
+**Continuous Integration (CI)** is the practice of frequently merging code changes into a shared repository, where automated tests ensure stability.  
+**Continuous Deployment/Delivery (CD)** automates the release process, ensuring new changes are safely and quickly deployed to production.
+
+### Importance for the Project
+- Reduces bugs by automatically testing each new code commit.  
+- Ensures consistent, reliable deployments.  
+- Encourages collaboration among developers.  
+- Speeds up feature delivery and updates.
+
+### Tools Used
 | Tool | Purpose |
 |------|----------|
-| **OpenAPI / Swagger** | For interactive API documentation and testing. |
-| **Nginx** | Acts as a reverse proxy and load balancer for serving the application efficiently. |
-| **Gunicorn** | A WSGI HTTP server used to serve Django applications in production. |
+| **GitHub Actions** | Automates testing, building, and deployment workflows directly from the repository. |
+| **Docker** | Ensures consistency between development and production environments. |
+| **Celery + Redis** | Manages background tasks efficiently during deployment. |
+| **PostgreSQL** | Provides a reliable database service for continuous integration testing. |
 
 ---
 
-## ⚙️ Core Features
-1. **User Authentication**  
-   - Register, login, update, and delete user profiles.
-2. **Property Management**  
-   - Create, retrieve, update, and delete property listings.
-3. **Booking System**  
-   - Manage bookings including check-in and check-out details.
-4. **Payment Processing**  
-   - Handle payment transactions related to bookings.
-5. **Review System**  
-   - Post and manage reviews for properties.
-6. **Database Optimization**  
-   - Use indexing and caching for fast data retrieval.
+## 🧩 Author
+**Name:** Damilare Aderinwale Animasaun  
+**GitHub:** [@DreAnimasaun](https://github.com/DreAnimasaun)  
+**Program:** ALX Software Engineering – Backend Specialization  
 
 ---
 
-## 📡 API Endpoints Overview
-
-### 👤 Users
-| Method | Endpoint | Description |
-|--------|-----------|--------------|
-| GET | `/users/` | List all users |
-| POST | `/users/` | Create a new user |
-| GET | `/users/{user_id}/` | Retrieve a specific user |
-| PUT | `/users/{user_id}/` | Update a specific user |
-| DELETE | `/users/{user_id}/` | Delete a specific user |
-
-### 🏠 Properties
-| Method | Endpoint | Description |
-|--------|-----------|--------------|
-| GET | `/properties/` | List all properties |
-| POST | `/properties/` | Create a new property |
-| GET | `/properties/{property_id}/` | Retrieve a specific property |
-| PUT | `/properties/{property_id}/` | Update a property |
-| DELETE | `/properties/{property_id}/` | Delete a property |
-
-### 📅 Bookings
-| Method | Endpoint | Description |
-|--------|-----------|--------------|
-| GET | `/bookings/` | List all bookings |
-| POST | `/bookings/` | Create a booking |
-| GET | `/bookings/{booking_id}/` | Retrieve a booking |
-| PUT | `/bookings/{booking_id}/` | Update a booking |
-| DELETE | `/bookings/{booking_id}/` | Delete a booking |
-
-### 💳 Payments
-| Method | Endpoint | Description |
-|--------|-----------|--------------|
-| POST | `/payments/` | Process a payment |
-
-### ⭐ Reviews
-| Method | Endpoint | Description |
-|--------|-----------|--------------|
-| GET | `/reviews/` | List all reviews |
-| POST | `/reviews/` | Create a review |
-| GET | `/reviews/{review_id}/` | Retrieve a review |
-| PUT | `/reviews/{review_id}/` | Update a review |
-| DELETE | `/reviews/{review_id}/` | Delete a review |
-
----
-
-## 🧠 Learning Objectives
-By completing this project, learners will:
-- Master collaborative workflows using Git and GitHub.  
-- Deepen their understanding of backend architecture and database design.  
-- Implement API security measures for authentication and data protection.  
-- Design and manage CI/CD pipelines for automated testing and deployment.  
-- Integrate technologies like Django, PostgreSQL, and GraphQL in a unified backend system.  
-
----
-
-## 🧩 Planned Repository Structure
+## 📝 License
+This project is created for educational purposes under the ALX Software Engineering program. It may be reused or modified for learning and demonstration purposes.
